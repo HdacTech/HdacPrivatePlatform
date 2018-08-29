@@ -1,0 +1,9 @@
+CREATE TABLE SEED
+(
+	user_no		INT			NOT NULL			COMMENT '회원번호'
+	, seq		INT			NOT NULL			COMMENT '순서'
+	, word		VARCHAR(32)		NOT NULL			COMMENT '단어'
+	, PRIMARY KEY (user_no, seq)
+) ENGINE=InnoDB default CHARSET=UTF8;
+
+CREATE INDEX IX1_SEED ON SEED(user_no, seq);

@@ -1,0 +1,55 @@
+@charset "UTF-8";
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+.navbar-header {
+	float:left
+}
+.navbar-default {
+	background-color: #f8f8f8;
+	border-color: #e7e7e7;
+}
+.navbar-fixed-top {
+	top: 0;
+	border-width: 0 0 1px;
+}
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px
+}
+@media (min-width: 768px) {
+    .container {
+        width:750px
+    }
+}
+@media (min-width: 992px) {
+    .container {
+        width:970px
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        width:1170px
+    }
+}
+
+.home {
+	margin-top: 0px;
+	padding-right: 0px;
+	margin-bottom: 10px;
+}
+.logo {
+	background-image: url('images/hdac_logo.png');
+	background-size: 100px;
+	display: inline-block;
+	width: 100px;
+	height: 36px;
+	position: relative;
+	top: -2px;
+	margin-right: 10px;
+}
