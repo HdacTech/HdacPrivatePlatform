@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	<insert id="insert" useGeneratedKeys="true" parameterType="map" keyProperty="seq_val">
+    	<selectKey resultType="long" keyProperty="seq_val" order="BEFORE">
+			SELECT MAX(seq_val) + 1 FROM tb_seq_member
+		</selectKey>
+		INSERT INTO tb_seq_member
+		(
+			seq_val
+		)
+		VALUES
+		(
+			#{seq_val}
+		)
+	</insert>
+</mapper>

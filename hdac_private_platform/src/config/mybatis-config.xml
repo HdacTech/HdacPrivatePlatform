@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+	</typeAliases>
+
+ 	<environments default="simple">
+		<environment id="simple">
+			<transactionManager type="JDBC"/>
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="org.mariadb.jdbc.Driver"/>
+				<property name="url" value="jdbc:mariadb://your db address:3306/test"/>
+				<property name="username" value="your db account"/>
+				<property name="password" value="your db password"/>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="mapper/commonMapper.xml"/>
+		<mapper resource="mapper/memberMapper.xml"/>
+	</mappers>
+</configuration>
