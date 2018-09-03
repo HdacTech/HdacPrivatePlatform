@@ -30,7 +30,7 @@ Hdac private platform is configured using Spring Framework.
 >1. RPC server information to connect - ROOT/WEB-INF/classes/config/hdac-rpc.properties
 >2. RDBMS connection information - ROOT / WEB-INF / classes / config / mybatis-config.xml
 
-※This source has been tested in centOS 7.0, apache 2.4.x, tomcat 8.x, mariaDB environments. 
+※This source has been tested in centOS 7.0, apache 2.4.6, tomcat 8.5.31.0, openJDK 10.0.2, mariaDB 10.1.34 environments.
 
 
 ### Using
