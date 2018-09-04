@@ -9,6 +9,6 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jre1.8.0_151"/>
+	<classpathentry kind="lib" path="C:/Program Files/Zulu/zulu-8"/>
 	<classpathentry kind="output" path="webapps/WEB-INF/classes"/>
 </classpath>
