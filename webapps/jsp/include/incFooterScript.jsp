@@ -3,7 +3,7 @@
 var __IMG_DOMAIN="<%=_IMG_DOMAIN %>"
 	, __CSS_DOMAIN="<%=_CSS_DOMAIN %>"
 	, __JS_DOMAIN="<%=_JS_DOMAIN %>",	_JS_PATH_ = __JS_DOMAIN + "/explorer/js/min/",	_JS_MINIFY = ".min"
-	, __JS_DOMAIN="",					_JS_PATH_ = __JS_DOMAIN + "/explorer/js/merge/",	_JS_MINIFY = ""
+//	, __JS_DOMAIN="",					_JS_PATH_ = __JS_DOMAIN + "/explorer/js/merge/",	_JS_MINIFY = ""
 	, _JS_PARAM_ = "v=<%=JSVer %>";
 
 var JsUrl =
