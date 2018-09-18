@@ -10,5 +10,5 @@ public interface MemberService
 {
 	public List<Map<String, Object>> getMemberList();
 	public Map<String, Object> createMember(Map<String, Object> paramMap);
-	public Map<String, Object> loginMember(Map<String, Object> paramMap);
+	public Map<String, Object> getMember(Map<String, Object> paramMap);
 }

@@ -118,7 +118,7 @@ public class HdacRpcHandler implements RpcHandler
 		{
 			transaction.addOutput(this.dto.getToWallet().getHdacAddress(), send_amount);
 			transaction.addOutput(this.dto.getFromWallet().getHdacAddress(), remain);
-			transaction.addOpReturnOutput(this.dto.getHexData().getBytes("UTF-8"));
+			transaction.addOpReturnOutput(this.dto.getHexData());
 						
 			try
 			{

@@ -83,7 +83,7 @@ public class MemberController
 		paramMap.put("password", password);
 
 		MemberService service = (MemberService)BeanUtil.getBean(MemberServiceImpl.class);
-		Map<String, Object> resultMap = service.loginMember(paramMap);
+		Map<String, Object> resultMap = service.getMember(paramMap);
 
 		if ("true".equals(resultMap.get("success")))
 		{

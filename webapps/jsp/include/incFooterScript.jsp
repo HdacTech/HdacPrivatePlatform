@@ -9,7 +9,7 @@ var __IMG_DOMAIN="<%=_IMG_DOMAIN %>"
 var JsUrl =
 {
 	jquery	  	: __JS_DOMAIN + '/explorer/js/lib/jquery.min',
-	jquery_ui	: __JS_DOMAIN + '/explorer/js/lib/jquery-ui-1.11.4/jquery-ui.min',
+	semantic	: __JS_DOMAIN + '/explorer/js/lib/semantic.min',
 	handlebars	: __JS_DOMAIN + '/explorer/js/lib/handlebars.amd.min',
 	common	  	: _JS_PATH_ + 'common' + _JS_MINIFY,
 };

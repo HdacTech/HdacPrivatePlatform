@@ -16,6 +16,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 		var info =
 		{
 			sock			: null,
+			template		: null,
 		};
 		var result =
 		{
@@ -56,20 +57,6 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 		this.handleClick = function(e, $trgt, callbackFunc)
 		{
 			var data = $trgt.data();
-			var type = data.ui;
-			if(type == "btnList"){
-				$("#view_list").css("display","block");
-				$("#view_info").css("display","none");
-				$("#view_check").css("display","none");
-			}else if(type == "btnInfo"){
-				$("#view_list").css("display","none");
-				$("#view_info").css("display","block");
-				$("#view_check").css("display","none");
-			}else if(type == "btnCheck"){
-				$("#view_list").css("display","none");
-				$("#view_info").css("display","none");
-				$("#view_check").css("display","block");
-			}
 			var logout = function()
 			{
 				var opt =
@@ -83,21 +70,18 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 				{
 					if (data && (data.success == 'true'))
 					{
-						var dlg = openDialog("Logout");
-						dlg.on("dialogclose", function(){
+						showPopup(null, 'logout', function()
+						{
 							var url = "/home.hdac";
 							COMMON._COMMON_.MovePage(url, true);
 						});	
 					}
 					else
 					{
-						var dlg = openDialog("Logout Fail");
+						showPopup('Fail', 'logout failed');
 					}
 				});
 			};
-			var focusReset = function(dlg){
-				dlg.parents('.ui-dialog').attr('tabindex', -1)[0].focus();
-			}
 			var sendWebSocket = function(param)
 			{
 				var connectWebSocket = function(callbackFunc)
@@ -125,7 +109,15 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 							console.log(data);
 							if (data.success == false)
 							{
-								openDialog("Fail<br>" + getMessage(data));
+								try
+								{
+									if (data.message)
+									{
+										var code = $.parseJSON(data.message);
+										showPopup('Fail', code.message);
+									}
+								}
+								catch (e) { console.log(e); }
 							}
 							else
 							{
@@ -152,98 +144,39 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 										break;
 										
 									case COMMON._METHOD_.SEND_RAW_TRANSACTION :
-										var msg = '';
-										$.each(data, function(key, value){
-											var line = key + " : " + value + "<br>";
-											msg += line;
-										});
-										openDialog(msg, "info");
+										console.log(data);
+//										showPopup(null, 'Select a destination to send.');
 										break;
 										
 									case COMMON._METHOD_.GET_ADDRESS_BALANCES :
 										if (data.result && (data.result.length > 0))
 										{
-											var result = data.result[0];
-											openDialog("Balance : " + result.qty);
+											showPopup(null, 'Balance : ' + data.result[0].qty);
 										}
 										break;
 
 									case COMMON._METHOD_.GET_BLOCKCHAIN_INFO :
-										if (data.result)
-										{
-											var result = data.result;
-																	
-											var tr = $("tr[name=info_tr]");
-											if(tr!=null) tr.remove();
-																
-											$.each(result, function(key, value){
-												if(value == false) value = "false";
-												else if(value == true) value == "true";
-												var tr = document.createElement('tr');
-												var td_title = document.createElement('td');
-												var td_value = document.createElement('td');
-												$(tr).attr("name", "info_tr");
-												$(td_title).html('<b>'+key+'</b>');
-												$(td_value).html(value);
-												tr.appendChild(td_title);
-												tr.appendChild(td_value);
-												$("#info_tbody").append(tr);
-											});
-										}
+										setBlockInfo(data);
 										break;
 
 									case COMMON._METHOD_.LIST_BLOCKS :
-										if (data.result && (data.result.length > 0))
-										{
-											var result = data.result;
-											console.log(result);
-											setBlockList(result);
-										}
+										setBlockList(data);
 										break;
 
 									case COMMON._METHOD_.GET_BLOCK :
-										if (data.result)
-										{
-											var result = data.result;
-											var $cont = $('[data-method=' + data.method + '][data-hash=' + result.hash + ']');
-											if ($cont.length > 0)
-											{
-												var dlg = $("#detail_info").dialog({
-												   	title:"test",
-													width:700,
-													height:400,
-												});
-												focusReset(dlg);
-												$("#detail_bits").html(result.bits);
-												$("#detail_chainwork").html(result.chainwork);
-												$("#detail_difficulty").html(result.difficulty);
-												$("#detail_miner").html(result.miner);
-												$("#detail_size").html(result.size);
-												$("#detail_tx").html("");
-												
-												$.each(result.tx, function(index, tx)
-												{
-													var a_tx = document.createElement("a");
-													$(a_tx).attr("href", "javascript:;");
-													$(a_tx).attr("data-name", "hdac");
-													$(a_tx).attr("data-click", "Y");
-													$(a_tx).attr("data-method", COMMON._METHOD_.GET_TXOUT);
-													$(a_tx).attr("data-tx", tx);
-													$(a_tx).css("color", "blue");
-													$(a_tx).html(tx);
-													$("#detail_tx").append(a_tx).append('<br>');
-												});
-											}
-										}
+										setBlockDetail(data);
 										break;
 
 									case COMMON._METHOD_.GET_TXOUT :
-										openDialog("Address : " + JSON.stringify(data.result.scriptPubKey.addresses));
+										console.log(data.result);
+										if (data.result && data.result.scriptPubKey)
+										{
+											showPopup('Address', JSON.stringify(data.result.scriptPubKey.addresses));
+										}
 										break;
 
 									default :
-										//alert(JSON.stringify(data));
-										openDialog(getMessage(data));
+										showPopup(null, getMessage(data));
 										break;
 								}
 							}
@@ -261,6 +194,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					return;
 
 				var jsonStr = JSON.stringify(param);
+				console.log(jsonStr);
 				if (info.sock)
 				{
 					_reqAjax = true;
@@ -275,6 +209,34 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					});
 				}
 			};
+			var getAddressBalances = function(param)
+			{
+				if (result.user.userNo > -1)
+				{
+					sendWebSocket(param);
+				}
+				else
+				{
+					showPopup(null, 'You can use it after login.');
+				}
+			};
+			var getAddressTransaction = function(param)
+			{
+				console.log(param);
+				if (result.user.userNo > -1)
+				{
+					if (param.txid == '')
+					{
+						showPopup(null, 'Please enter txid.');
+						return;
+					}
+					sendWebSocket(param);
+				}
+				else
+				{
+					showPopup(null, 'You can use it after login.');
+				}
+			};
 			var method = function(method, data)
 			{
 				var param =
@@ -287,24 +249,24 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 						param.amount	= $("[name=amount]").val();
 						param.to		= $("[name=to]").val();
 						param.textdata	= $("[name=textdata]").val();
-						if(result.user > -1){
+
+						if (result.user.userNo > -1)
+						{
 							if (param.to == '')
 							{
-								openDialog("Select a destination to send.")
+								showPopup(null, 'Select a destination to send.');
 								return;
 							}
 							sendWebSocket(param);
-						}else{
-							openDialog("You can use it after login.");
+						}
+						else
+						{
+							showPopup(null, 'You can use it after login.');
 						}
 						break;
 
 					case COMMON._METHOD_.GET_ADDRESS_BALANCES :
-						if(result.user > -1){
-							sendWebSocket(param);
-						}else{
-							openDialog("You can use it after login.");
-						}
+						getAddressBalances(param);
 						break;
 					case COMMON._METHOD_.GET_BLOCKCHAIN_INFO :
 					case COMMON._METHOD_.LIST_BLOCKS :
@@ -323,16 +285,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 
 					case COMMON._METHOD_.GET_ADDRESS_TRANSACTION :
 						param.txid		= $("[name=txid]").val();
-						if(result.user > -1){
-							if (param.txid == '')
-							{
-								openDialog("Please enter txid");
-								return;
-							}
-							sendWebSocket(param);
-						}else{
-							openDialog("You can use it after login.");
-						}
+						getAddressTransaction(param);
 						break;
 				}
 			};
@@ -356,6 +309,10 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 
 				case 'hdac' :
 					method(data.method, data);
+					break;
+
+				case 'tx_check' :
+					showTxCheckForm();
 					break;
 
 				default :
@@ -385,98 +342,130 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 		};
 		var showPage = function()
 		{
-//			setBlockList();
-			setLogin();
-		};
-		var setBlockList = function(list)
-		{
-			var toGMT = function(time)
+			var registerHelpers = function()
 			{
-				var diff = Math.ceil((new Date() - new Date(time * 1000)) / 1000);
-				if (diff < 60)
-					return diff + " seconds ago";
-
-				diff = Math.ceil(diff / 60);
-				if (diff < 60)
-					return diff + " minutes ago";
-
-				diff = Math.ceil(diff / 60);
-				if (diff < 24)
-					return diff + " hours ago";
-
-				diff = Math.ceil(diff / 24);
-				return diff + " days ago";
-			};
-						
-			var tr = $("tr[name=list_tr]");
-			if(tr!=null) tr.remove();
-			
-			var blocks = list.reverse();
-			$.each(blocks, function(index, block)
-			{
-				var tr = document.createElement('tr');
-				var td_block = document.createElement('td');
-				var td_height = document.createElement('td');
-				var td_age = document.createElement('td');
-				var td_transations = document.createElement('td');
-				var a_block = document.createElement('a');
-										
-				$(tr).attr("name", "list_tr");
-				$(a_block).attr("href", "javascript:;");
-				$(a_block).attr("data-click", "Y");
-				$(a_block).attr("data-name", "hdac");
-				$(a_block).attr("data-method", COMMON._METHOD_.GET_BLOCK);
-				$(a_block).attr("data-hash", block.hash);
-				$(a_block).html(block.hash);
-										
-				td_block.appendChild(a_block);
-				$(td_height).html(block.height);
-				$(td_age).html(toGMT(block.time));
-				$(td_transations).html(block.txcount);
-				
-				tr.appendChild(td_block);
-				tr.appendChild(td_height);
-				tr.appendChild(td_age);
-				tr.appendChild(td_transations);
-				
-				$("#list_tbody").append(tr);
-			});
-		};
-		var setLogin = function()
-		{
-			$("#btn_send").attr("data-method", COMMON._METHOD_.LIST_UNSPENT);
-			$("#btn_list").attr("data-method", COMMON._METHOD_.LIST_BLOCKS);
-			$("#btn_info").attr("data-method", COMMON._METHOD_.GET_BLOCKCHAIN_INFO);
-			$("#btn_bal").attr("data-method", COMMON._METHOD_.GET_ADDRESS_BALANCES);
-			$("#btn_txcheck").attr("data-method", COMMON._METHOD_.GET_ADDRESS_TRANSACTION);
-						
-			$("#header_title").css("display", "block");
-			$("#header_inputarea").css("display", "block");
-			$("#view_body").css("display", "block");
-			
-			$("#btn_list").click();
-						
-			var html = '';
-			if (result.user > -1)
-			{
-				$("#btn_login").html("<b>Logout<b>");
-				$("#btn_login").attr("data-name", "logout");
-				
-				var curUser;	
-				$.each(result.list, function(index, user)
+				HANDLEBARS.registerHelper('chk', function(userNo, options)
 				{
-					html += '<option value="' + user.user_no + '">' + user.username + '</option>';
-					if(result.user == user.user_no){
-						curUser = user.user_id;
-					}
+					if (userNo > -1)
+						return options.fn(this);
+					return options.inverse(this);
 				});
-				$("#select_user").append(html);
-				$("#btn_join").html("current user = " + curUser);
-			}
-			else
+				HANDLEBARS.registerHelper('toGMT', function(time)
+				{
+					var diff = Math.ceil((new Date() - new Date(time * 1000)) / 1000);
+					if (diff < 60)
+						return diff + " seconds ago";
+
+					diff = Math.ceil(diff / 60);
+					if (diff < 60)
+						return diff + " minutes ago";
+
+					diff = Math.ceil(diff / 60);
+					if (diff < 24)
+						return diff + " hours ago";
+
+					diff = Math.ceil(diff / 24);
+					return diff + " days ago";
+				});
+			};
+
+			registerHelpers();
+			setHeader();
+
+			$('.ui.dropdown').dropdown();
+		};
+		var setHeader = function()
+		{
+			var setMenu = function()
 			{
-				
+				var template = HANDLEBARS.compile($("#header-menu").html());
+				$("#menu").html(template(result.user));
+			};
+			var setForm = function()
+			{
+				result.method = COMMON._METHOD_.LIST_UNSPENT;
+
+				if (result.user.userNo > -1)
+				{
+					var template = HANDLEBARS.compile($("#header_form").html());
+					$("#form").html(template(result)).show();
+				}
+			};
+			var setBodyHeader = function()
+			{
+				var template = HANDLEBARS.compile($("#body_header").html());
+				$("#main_header").html(template(COMMON._METHOD_));
+			};
+
+			setMenu();
+			setForm();
+			setBodyHeader();
+
+			console.log(result);
+		};
+		var setBlockList = function(data)
+		{
+			if (data.result && (data.result.length > 0))
+			{
+				data.result.method = COMMON._METHOD_.GET_BLOCK;
+
+				var template = HANDLEBARS.compile($("#block_list").html());
+				$("#main_body").html(template(data.result));
 			}
+		};
+		var setBlockInfo = function(data)
+		{
+			if (data.result)
+			{
+				var template = HANDLEBARS.compile($("#block_info").html());
+				$("#main_body").html(template(data.result));
+			}
+		};
+		var setBlockDetail = function(data)
+		{
+			if (data.result)
+			{
+				var result = data.result;
+
+				$("#block_detail_table").remove();
+
+				var $cont = $('[data-method=' + data.method + '][data-hash=' + result.hash + ']');
+				if ($cont.length > 0)
+				{
+					data.result.method = COMMON._METHOD_.GET_TXOUT;
+
+					var template = HANDLEBARS.compile($("#block_detail").html());
+					$cont.append(template(data.result));
+				}
+			}
+		};
+		var showTxCheckForm = function()
+		{
+			var template = HANDLEBARS.compile($("#tx_check_form").html());
+			$("#main_body").html(template(COMMON._METHOD_));
+		};
+		var showPopup = function(header, content, callbackFunc)
+		{
+			var message =
+			{
+				header		: header,
+				content		: content,
+			};
+
+			if (info.template == null)
+			{
+				info.template = HANDLEBARS.compile($("#modal_popup").html());
+			}
+
+			$("#modal").html(info.template(message));
+			$("#ui_modal").modal(
+			{
+				onHide		: function()
+				{
+					if (typeof callbackFunc == "function")
+						callbackFunc();
+				}
+			}).modal('show');
 		};
 	};
 	return new _M_();

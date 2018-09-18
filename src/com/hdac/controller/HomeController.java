@@ -42,7 +42,12 @@ public class HomeController
 		resultMap.put("list", service.getMemberList());
 
 		Auth auth = AuthService.getAuth();
-		resultMap.put("user", auth.getAuth(request, response));
+		long userNo = auth.getAuth(request, response);
+
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("userNo", userNo);
+
+		resultMap.put("user", service.getMember(paramMap));
 
 		view.addObject("data", JsonUtil.toJsonString(resultMap).toString());
 

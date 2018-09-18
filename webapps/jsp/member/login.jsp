@@ -4,22 +4,43 @@
 %>
 </head>
 <body>
-	<div id="wrapper">
-		<div id="view_list" class="view_body_tablearea">
-			<div>
-				<form name="form" onsubmit="return false;">
-					<div class="login_area">
-						<button class="ui-button ui-widget ui-corner-left header_input" style="width:60px; margin-top:5px; background:#f6f6f6">ID</button>
-						<input type="text" name="user_id" class="ui-button ui-widget ui-corner-right header_input login_area_input"/><br>
-						<button class="ui-button ui-widget ui-corner-left header_input" style="width:60px; margin-top:5px; background:#f6f6f6">PW</button>
-						<input type="password" name="password" class="ui-button ui-widget ui-corner-right header_input login_area_input"/>
-					</div>
-				</form>
-	  		</div><br>
-			<button class="ui-button ui-widget ui-corner-all body_btn login_area" style="background:#00b8f1; width:392px" data-click="Y" data-name="login">Login</button>
+<div id="modal"></div>
+<div id="wrap">
+	<header class="header">
+		<div class="header_inner">
+			<div class="header_logo">
+				<h1>
+					<span class="logo focus" data-click="Y" data-name="home"></span>
+				</h1>
+			</div>
+			<div class="header_menu" id="menu"></div>
 		</div>
-	</div>
+		<div class="header_title">
+			<span class="title">LOGIN</span>
+		</div>
+	</header>
+	<section class="main">
+		<div class="input_form">
+			<form name="form" onsubmit="return false;">
+				<div class="ui huge labels">
+					<div class="ui label one_hundred">ID</div>
+					<div class="ui input three_hundred">
+						<input type="text" name="user_id">
+					</div>
+					<br/>
+					<div class="ui label one_hundred">PW</div>
+					<div class="ui input three_hundred">
+						<input type="password" name="password">
+					</div>
+					<br/>
+					<input type="button" class="ui fluid primary button" data-click="Y" data-name="login" value="Login"/>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
 <%@ include file="../include/incFooterScript.jsp" %>
+<%@ include file="../explorer/template/home.template.jsp" %>
 <script type="text/javascript">
 requirejs.config(
 {
@@ -27,20 +48,27 @@ requirejs.config(
 	paths :
 	{
 		'jquery'		: JsUrl.jquery,
-		'jquery_ui'		: JsUrl.jquery_ui,
+		'semantic'		: JsUrl.semantic,
 		'handlebars'	: JsUrl.handlebars,
 		'common'		: JsUrl.common,
 		'login'			: 'login' + _JS_MINIFY,
     },
-	urlArgs : _JS_PARAM_,
+    shim :
+    {
+        semantic :
+        {
+            deps: ['jquery'],
+        },
+    },
+   	urlArgs : _JS_PARAM_,
 });
 requirejs(
 [
 	'jquery',
-	'jquery_ui',
+	'semantic',
 	'common',
 	'login',
-], function($, ui, common, login)
+], function($, semantic, common, login)
 {
 	$(document).ready(function()
 	{

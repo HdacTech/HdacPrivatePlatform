@@ -1,5 +1,6 @@
 package com.hdac.common;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -20,7 +21,22 @@ public class JsonUtil
 				String key = entry.getKey();
 				Object value = entry.getValue();
 
-				jsonObject.put(key, value);
+				if (value instanceof String)
+				{
+					jsonObject.put(key, (String)value);
+				}
+				else if (value instanceof Number)
+				{
+					jsonObject.put(key, (Number)value);
+				}
+				else if (value instanceof Collection)
+				{
+					jsonObject.put(key, (Collection<?>)value);
+				}
+				else
+				{
+					jsonObject.put(key, value);
+				}
 			}
 		}
 		catch (JSONException e)

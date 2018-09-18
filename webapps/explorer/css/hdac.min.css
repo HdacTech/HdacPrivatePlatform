@@ -1,0 +1,9 @@
+@charset "UTF-8";.focus{cursor:pointer}#wrap{position:relative;min-width:1080px}.header{position:relative;z-index:100;background:#002561}
+.header_inner{position:relative;z-index:1;width:1080px;height:100px;margin:0 auto}.header_logo{overflow:hidden;float:left;margin-left:50px;width:180px;height:100px}
+span.logo{overflow:hidden;background-image:url(images/hdac_logo.png);background-size:100px;display:inline-block;top:45px;width:100px;height:36px;position:relative}
+div.header_menu{position:absolute;top:60px;right:-5px;padding-right:8px;margin-right:50px;background-position:100% -18px}div.header_menu span{font-size:14px;margin:3px;color:#fff}
+div.header_menu span.off{display:none}.header_title{position:relative;height:36px;text-align:center}.header_title span{text-align:center;font-size:30px;color:#fff}
+.header_form{position:relative;width:720px;height:100px;margin:0 auto}.header_send{height:40px;z-index:10;margin:5px}i.icon.hdac{overflow:hidden;background-image:url(images/hdac_logo.png);background-size:110px}
+.main{position:relative}.main_header{position:relative;z-index:1;width:1080px;height:100px;margin:10px auto;text-align:center}.main_body{position:relative;z-index:1;width:900px;height:100px;margin:10px auto}
+.main_table{width:100%;margin:10px}.body_form{position:relative;width:720px;height:100px;margin:0 auto;text-align:center}.sub_table{width:100%;margin:10px}
+.sub_table td{word-break:break-all}.input_form{position:relative;z-index:1;width:420px;margin:10px auto;text-align:center}.one_hundred{width:100px}.three_hundred{width:300px}

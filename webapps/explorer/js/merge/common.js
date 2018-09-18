@@ -531,6 +531,11 @@ define(["jquery"], function($)
 				case 'scroll-top' :
 					$(document).scrollTop(0);
 					break;
+
+				case 'home' :
+					var url = "/home.hdac";
+					_this._COMMON_.MovePage(url, true);
+					break;
 			}
 		};
 		

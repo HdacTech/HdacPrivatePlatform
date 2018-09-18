@@ -107,7 +107,7 @@ public class MemberServiceImpl implements MemberService
 	}
 
 	@Override
-	public Map<String, Object> loginMember(Map<String, Object> paramMap)
+	public Map<String, Object> getMember(Map<String, Object> paramMap)
 	{
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", "false");

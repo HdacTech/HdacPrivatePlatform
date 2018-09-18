@@ -81,15 +81,18 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 				{
 					if (data && (data.success == 'true'))
 					{
-						var dlg = openDialog("Login Success");
-						dlg.on("dialogclose", function(){
+						showPopup(null, 'login success', function()
+						{
 							var url = "/home.hdac";
 							COMMON._COMMON_.MovePage(url, true);
 						});	
 					}
 					else
-						var dlg = openDialog("Login Fail");
-						_reqAjax = false;
+					{
+						console.log(1);
+						showPopup('Fail', 'login failed');
+					}
+					_reqAjax = false;
 				});
 				_reqAjax = true;
 			};
@@ -132,11 +135,65 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 		};
 		var showPage = function()
 		{
-			$("#header_title").html("LOGIN");
-			$("#header_title").css("display", "block");
-			$("#header_inputarea").css("display", "none");
-			
-			$("#view_body").css("display", "none");
+			var registerHelpers = function()
+			{
+				HANDLEBARS.registerHelper('chk', function(userNo, options)
+				{
+					if (userNo > -1)
+						return options.fn(this);
+					return options.inverse(this);
+				});
+			};
+
+			registerHelpers();
+			setHeader();
+			setInput();
+
+			$('.ui.dropdown').dropdown();
+		};
+		var setHeader = function()
+		{
+			var setMenu = function()
+			{
+				var template = HANDLEBARS.compile($("#header-menu").html());
+				$("#menu").html(template());
+			};
+
+			setMenu();
+		};
+		var setInput = function()
+		{
+			$("[name=user_id]").focus();
+			$("[name=password]").keyup(function(e)
+			{
+				if (e.keyCode == 13)
+				{
+					$("[data-name=login]").trigger("click");
+				}
+			});
+		};
+		var showPopup = function(header, content, callbackFunc)
+		{
+			var message =
+			{
+				header		: header,
+				content		: content,
+			};
+
+			if (info.template == null)
+			{
+				info.template = HANDLEBARS.compile($("#modal_popup").html());
+			}
+
+			$("#modal").html(info.template(message));
+			$("#ui_modal").modal(
+			{
+				onHide		: function()
+				{
+					if (typeof callbackFunc == "function")
+						callbackFunc();
+				}
+			}).modal('show');
 		};
 	};
 	return new _M_();
