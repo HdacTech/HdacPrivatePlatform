@@ -314,6 +314,10 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 				case 'tx_check' :
 					showTxCheckForm();
 					break;
+					
+				case 'copy' :
+					copyText();
+					break;
 
 				default :
 					if (typeof callbackFunc == "function")
@@ -329,7 +333,20 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 		{
 			return bInit;
 		};
-
+		var is_ie = function()
+		{
+			  if(window.navigator.userAgent.toLowerCase().indexOf("chrome") == -1) return true;
+			  return false;
+		}
+		var copyText = function()
+		{
+			if(is_ie()) {
+			    window.clipboardData.setData("Text", $("#copy_target").html());
+			    alert("Copy Success");
+			    return;
+			}
+			window.prompt('Copy the text below using Ctrl+c', $("#copy_target").html());
+		}
 		var getDataList = function(page_no, bInit, callbackFunc)
 		{
 			var data = $.parseJSON($("[name=data]").val());
@@ -435,7 +452,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					data.result.method = COMMON._METHOD_.GET_TXOUT;
 
 					var template = HANDLEBARS.compile($("#block_detail").html());
-					$cont.append(template(data.result));
+					$cont.after(template(data.result));
 				}
 			}
 		};
