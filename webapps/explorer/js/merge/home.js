@@ -248,7 +248,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					case COMMON._METHOD_.LIST_UNSPENT :
 						param.amount	= $("[name=amount]").val();
 						param.to		= $("[name=to]").val();
-						param.textdata	= $("[name=textdata]").val();
+						param.textdata	= $("[name=textarea]").val();
 
 						if (result.user.userNo > -1)
 						{
