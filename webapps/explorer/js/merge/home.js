@@ -291,6 +291,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 			};
 
 			var data = $trgt.data(), name = data.name;
+			var tx = data.tx;
 			switch (name)
 			{
 				case 'login' :
@@ -316,7 +317,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					break;
 					
 				case 'copy' :
-					copyText();
+					copyText(tx);
 					break;
 
 				default :
@@ -338,14 +339,14 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 			  if(window.navigator.userAgent.toLowerCase().indexOf("chrome") == -1) return true;
 			  return false;
 		}
-		var copyText = function()
+		var copyText = function(tx)
 		{
 			if(is_ie()) {
-			    window.clipboardData.setData("Text", $("#copy_target").html());
+			    window.clipboardData.setData("Text", tx);
 			    alert("Copy Success");
 			    return;
 			}
-			window.prompt('Copy the text below using Ctrl+c', $("#copy_target").html());
+			window.prompt('Copy the text below using Ctrl+c', tx);
 		}
 		var getDataList = function(page_no, bInit, callbackFunc)
 		{

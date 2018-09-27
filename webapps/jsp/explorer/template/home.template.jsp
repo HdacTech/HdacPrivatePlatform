@@ -166,8 +166,17 @@
 				<td>{{size}}</td>
 			</tr>
 			<tr>
-				<td><b>tx</b><button class="ui button" style="margin-left:30px" data-click="Y" data-name="copy">Copy</button></td>
-				<td><a id="copy_target" href="javascript:;" data-click="Y" data-name="hdac" data-method="{{method}}" data-tx="{{tx}}">{{tx}}</a></td>
+				<td>
+					<b>tx</b>
+					{{#tx}}	
+						<button class="ui button" style="float:right; margin-bottom:3px" data-click="Y" data-name="copy" data-tx="{{.}}">Copy</button><br>
+					{{/tx}}
+				</td>
+				<td>
+					{{#tx}}	
+						<a id="copy_target" href="javascript:;" data-click="Y" data-name="hdac" data-method="{{../method}}" data-tx="{{.}}">{{.}}</a><br>
+					{{/tx}}
+				</td>
 			</tr>
 		</tbody>
 	</table>
