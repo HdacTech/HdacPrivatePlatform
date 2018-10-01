@@ -191,6 +191,7 @@
 	<div class="ui primary button" data-click="Y" data-name="hdac" data-method="{{GET_ADDRESS_TRANSACTION}}">
 		Check
 	</div>
+	<table class="ui celled striped table" id="tx_tbody" style="display:none"></table>
 </div>
 </script>
 <script id="modal_popup" type="text/x-Handlebars-template">

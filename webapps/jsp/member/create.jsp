@@ -38,7 +38,7 @@
 						<input type="password" name="password">
 					</div>
 					<br/>
-					<input type="button" class="ui fluid primary button" data-click="Y" data-name="join" value="Create Account"/>
+					<input type="button" class="ui fluid primary button" data-click="Y" data-name="submit" value="Create Account"/>
 				</div>
 			</form>
 		</div>
