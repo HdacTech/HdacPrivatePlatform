@@ -428,7 +428,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 				data.result.method = COMMON._METHOD_.GET_BLOCK;
 
 				var template = HANDLEBARS.compile($("#block_list").html());
-				$("#main_body").html(template(data.result));
+				$("#main_body").html(template(data.result.reverse()));
 			}
 		};
 		var setBlockInfo = function(data)
