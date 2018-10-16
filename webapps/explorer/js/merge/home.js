@@ -109,38 +109,30 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 							console.log(data);
 							if (data.success == false)
 							{
-								try
+								if (data.message)
 								{
-									if (data.message)
+									console.log(typeof data.message);
+									try
 									{
 										var code = $.parseJSON(data.message);
 										showPopup('Fail', code.message);
 									}
+									catch (e)
+									{
+										console.log(e);
+										showPopup('Fail', data.message);
+									}
 								}
-								catch (e) { console.log(e); }
 							}
 							else
 							{
 								switch (data.method)
 								{
-									case COMMON._METHOD_.GET_ADDRESS_TRANSACTION :
-										var result = data.result;
-																			
-										var tr = $("tr[name=tx_tr]");
-										if(tr!=null) tr.remove();
-															
-										$.each(result, function(key, value){
-											value = JSON.stringify(value);
-											var tr = document.createElement('tr');
-											var td_title = document.createElement('td');
-											var td_value = document.createElement('td');
-											$(tr).attr("name", "tx_tr");
-											$(td_title).html('<b>'+key+'</b>');
-											$(td_value).html(value);
-											tr.appendChild(td_title);
-											tr.appendChild(td_value);
-											$("#tx_tbody").append(tr);
-										});
+									case COMMON._METHOD_.GET_RAW_TRANSACTION :
+										if (data.result && (data.result.length > 0))
+										{
+											showPopup(null, 'Tx : ' + data.result);
+										}
 										break;
 										
 									case COMMON._METHOD_.SEND_RAW_TRANSACTION :
@@ -173,6 +165,9 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 										{
 											showPopup('Address', JSON.stringify(data.result.scriptPubKey.addresses));
 										}
+										break;
+                    
+									case COMMON._METHOD_.LIST_UNSPENT :
 										break;
 
 									default :
@@ -220,22 +215,15 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					showPopup(null, 'You can use it after login.');
 				}
 			};
-			var getAddressTransaction = function(param)
+			var getRawTransaction = function(param)
 			{
 				console.log(param);
-				if (result.user.userNo > -1)
+				if (param.tx == '')
 				{
-					if (param.txid == '')
-					{
-						showPopup(null, 'Please enter txid.');
-						return;
-					}
-					sendWebSocket(param);
+					showPopup(null, 'Please enter txid.');
+					return;
 				}
-				else
-				{
-					showPopup(null, 'You can use it after login.');
-				}
+				sendWebSocket(param);
 			};
 			var method = function(method, data)
 			{
@@ -268,6 +256,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					case COMMON._METHOD_.GET_ADDRESS_BALANCES :
 						getAddressBalances(param);
 						break;
+
 					case COMMON._METHOD_.GET_BLOCKCHAIN_INFO :
 					case COMMON._METHOD_.LIST_BLOCKS :
 						sendWebSocket(param);
@@ -283,15 +272,16 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 						sendWebSocket(param);
 						break;
 
-					case COMMON._METHOD_.GET_ADDRESS_TRANSACTION :
-						param.txid		= $("[name=txid]").val();
-						getAddressTransaction(param);
+					case COMMON._METHOD_.GET_RAW_TRANSACTION :
+						param.method = COMMON._METHOD_.GET_TXOUT;
+
+						param.tx		= $("[name=txid]").val();
+						getRawTransaction(param);
 						break;
 				}
 			};
 
 			var data = $trgt.data(), name = data.name;
-			var tx = data.tx;
 			switch (name)
 			{
 				case 'login' :
@@ -317,7 +307,7 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 					break;
 					
 				case 'copy' :
-					copyText(tx);
+					copyText(data);
 					break;
 
 				default :
@@ -339,14 +329,14 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 			  if(window.navigator.userAgent.toLowerCase().indexOf("chrome") == -1) return true;
 			  return false;
 		}
-		var copyText = function(tx)
+		var copyText = function(data)
 		{
 			if(is_ie()) {
-			    window.clipboardData.setData("Text", tx);
+			    window.clipboardData.setData("Text", data.tx);
 			    alert("Copy Success");
 			    return;
 			}
-			window.prompt('Copy the text below using Ctrl+c', tx);
+			window.prompt('Copy the text below using Ctrl+c', data.tx);
 		}
 		var getDataList = function(page_no, bInit, callbackFunc)
 		{

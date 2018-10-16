@@ -63,8 +63,10 @@ public class HdacRpcHandler implements RpcHandler
 				case CommandUtils.LIST_BLOCKS :
 				case CommandUtils.GET_BLOCK :
 				case CommandUtils.GET_TXOUT :
+				case CommandUtils.GET_RAW_TRANSACTION :
 					HdacUtil.sendMessage(this.dto.getWebSocketSession(), method, true, data);
 					break;
+
 				case CommandUtils.GET_ADDRESS_TRANSACTION :
 					JSONObject resultData = data.getJSONObject("result");
 					String hexString = resultData.get("data").toString().substring(2, resultData.get("data").toString().length()-2);
@@ -118,7 +120,8 @@ public class HdacRpcHandler implements RpcHandler
 		{
 			transaction.addOutput(this.dto.getToWallet().getHdacAddress(), send_amount);
 			transaction.addOutput(this.dto.getFromWallet().getHdacAddress(), remain);
-			transaction.addOpReturnOutput(this.dto.getHexData().getBytes("UTF-8"));
+			transaction.addOpReturnOutput(this.dto.getHexData(), "UTF-8");
+						
 			try
 			{
 				for (int i = 0; i < utxos.length(); i++)

@@ -56,9 +56,15 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 			var checkField = function()
 			{
 				if ($("[name=user_id]").val().trim() == '')
+				{
+					showPopup(null, 'input user id');
 					return false;
+				}
 				if ($("[name=password]").val().trim() == '')
+				{
+					showPopup(null, 'input password');
 					return false;
+				}
 			};
 			var loginMember = function()
 			{

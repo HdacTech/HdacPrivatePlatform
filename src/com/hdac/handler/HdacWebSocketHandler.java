@@ -85,6 +85,10 @@ public class HdacWebSocketHandler extends TextWebSocketHandler
 				case CommandUtils.GET_ADDRESS_TRANSACTION :
 					resultMap = service.getAddressTransaction(session, paramMap);
 					break;
+
+				case CommandUtils.GET_RAW_TRANSACTION :
+					resultMap = service.getRawTransaction(session, paramMap);
+					break;
 			}
 
 			String success = StringUtil.nvl(resultMap.get("success"));

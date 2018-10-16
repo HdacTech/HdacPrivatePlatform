@@ -306,4 +306,30 @@ public class HdacServiceImpl implements HdacService
 
 		return wallet;
 	}
+
+	@Override
+	public Map<String, Object> getRawTransaction(WebSocketSession session, Map<String, Object> paramMap)
+	{
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", false);
+
+		HdacRpcHandlerDto dto = new HdacRpcHandlerDto();
+		dto.setWebSocketSession(session);
+
+		try
+		{
+			HdacCommand hdacCommand = HdacUtil.getHdacCommand(dto, false);
+			if (hdacCommand != null)
+			{
+				hdacCommand.getrawtransaction(StringUtil.nvl(paramMap.get("txid"), ""), null);
+				resultMap.put("success", true);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			resultMap.put("message", e.getMessage());
+		}
+		return resultMap;
+	}
 }

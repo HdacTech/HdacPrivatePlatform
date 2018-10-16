@@ -55,12 +55,28 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 		{
 			var checkField = function()
 			{
-				if ($("[name=user_id]").val().trim() == '')
+				var user_id = $("[name=user_id]").val().trim();
+				if (user_id == '')
+				{
+					showPopup(null, 'input user id');
 					return false;
+				}
+				var regExp = /^[A-Za-z0-9+]{4,20}$/i;
+				if (user_id.match(regExp) == null)
+				{
+					showPopup(null, 'invalid user id');
+					return false;
+				}
 				if ($("[name=user_name]").val().trim() == '')
+				{
+					showPopup(null, 'input user name');
 					return false;
+				}
 				if ($("[name=password]").val().trim() == '')
+				{
+					showPopup(null, 'input password');
 					return false;
+				}
 			};
 			var createMember = function()
 			{

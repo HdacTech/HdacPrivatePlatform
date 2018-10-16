@@ -40,7 +40,7 @@
 	</section>
 </div>
 <%@ include file="../include/incFooterScript.jsp" %>
-<%@ include file="../explorer/template/home.template.jsp" %>
+<%@ include file="../template/gnb.template.jsp" %>
 <script type="text/javascript">
 requirejs.config(
 {

@@ -12,6 +12,7 @@ define(["jquery"], function($)
 			LIST_UNSPENT			: 0x12,
 			GET_BLOCK				: 0x0E,
 			GET_BLOCKCHAIN_INFO		: 0x54,
+			GET_RAW_TRANSACTION		: 0x58,
 			GET_TXOUT				: 0x59,
 			LIST_BLOCKS				: 0x5A,
 			SEND_RAW_TRANSACTION	: 0x0B

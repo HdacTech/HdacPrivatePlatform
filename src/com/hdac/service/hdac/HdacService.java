@@ -15,4 +15,5 @@ public interface HdacService
 	public Map<String, Object> getBlock(WebSocketSession session, Map<String, Object> paramMap);
 	public Map<String, Object> getTxOut(WebSocketSession session, Map<String, Object> paramMap);
 	public Map<String, Object> getAddressTransaction(WebSocketSession session, Map<String, Object> paramMap);
+	public Map<String, Object> getRawTransaction(WebSocketSession session, Map<String, Object> paramMap);
 }
