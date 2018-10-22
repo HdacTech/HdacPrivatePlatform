@@ -167,8 +167,8 @@ define(["jquery", "handlebars", "common"], function($, HANDLEBARS, COMMON)
 										}
 										break;
                     
-									case COMMON._METHOD_.LIST_UNSPENT :
-										break;
+									/*case COMMON._METHOD_.LIST_UNSPENT :
+										break;*/
 
 									default :
 										showPopup(null, getMessage(data));
