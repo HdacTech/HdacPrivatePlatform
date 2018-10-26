@@ -24,20 +24,21 @@
 			<form name="form" onsubmit="return false;">
 				<div class="ui huge labels">
 					<div class="ui label one_hundred">ID</div>
-					<div class="ui input three_hundred">
-						<input type="text" name="user_id">
+					<div class="ui right labeled input three_hundred">
+						<input type="text" name="user_id" maxlength="20">
+						<div class="ui label" style="font-size: 14px;">(A-Za-z0-9)</div>
 					</div>
-					<br/>
+					<p class="br_height"></p>
 					<div class="ui label one_hundred">NAME</div>
 					<div class="ui input three_hundred">
-						<input type="text" name="user_name">
+						<input type="text" name="user_name" maxlength="20">
 					</div>
-					<br/>
+					<p class="br_height"></p>
 					<div class="ui label one_hundred">PW</div>
 					<div class="ui input three_hundred">
-						<input type="password" name="password">
+						<input type="password" name="password" maxlength="40">
 					</div>
-					<br/>
+					<p class="br_height"></p>
 					<input type="button" class="ui fluid primary button" data-click="Y" data-name="submit" value="Create Account"/>
 				</div>
 			</form>

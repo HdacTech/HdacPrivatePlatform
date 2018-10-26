@@ -27,12 +27,12 @@
 					<div class="ui input three_hundred">
 						<input type="text" name="user_id">
 					</div>
-					<br/>
+					<p class="br_height"></p>
 					<div class="ui label one_hundred">PW</div>
 					<div class="ui input three_hundred">
 						<input type="password" name="password">
 					</div>
-					<br/>
+					<p class="br_height"></p>
 					<input type="button" class="ui fluid primary button" data-click="Y" data-name="login" value="Login"/>
 				</div>
 			</form>
